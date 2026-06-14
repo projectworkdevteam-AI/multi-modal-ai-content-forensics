@@ -1,0 +1,280 @@
+
+<style>
+.top-bar{padding:1rem 1.25rem 0.75rem;border-bottom:0.5px solid var(--color-border-tertiary)}
+.top-meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px;align-items:center}
+.pill{display:inline-flex;align-items:center;gap:4px;font-size:11px;padding:3px 10px;border-radius:20px;font-weight:500}
+.pill-blue{background:#E6F1FB;color:#0C447C}
+.pill-purple{background:#EEEDFE;color:#3C3489}
+.pill-teal{background:#E1F5EE;color:#085041}
+.pill-amber{background:#FAEEDA;color:#633806}
+
+.filter-bar{display:flex;gap:6px;padding:0.75rem 1.25rem;border-bottom:0.5px solid var(--color-border-tertiary);flex-wrap:wrap}
+.fbtn{font-size:12px;padding:4px 12px;border-radius:20px;border:0.5px solid var(--color-border-secondary);background:transparent;color:var(--color-text-secondary);cursor:pointer;transition:all .15s}
+.fbtn.on{border-color:transparent;font-weight:500}
+.fbtn.on.all{background:#E6F1FB;color:#0C447C}
+.fbtn.on.sa{background:#E6F1FB;color:#185FA5}
+.fbtn.on.sb{background:#EEEDFE;color:#3C3489}
+.fbtn.on.sc{background:#E1F5EE;color:#0F6E56}
+.fbtn.on.all-s{background:#F1EFE8;color:#444441}
+
+.week-header{display:flex;align-items:center;gap:10px;padding:0.75rem 1.25rem 0.4rem;margin-top:4px}
+.week-label{font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:.06em;color:var(--color-text-secondary)}
+.week-line{flex:1;height:0.5px;background:var(--color-border-tertiary)}
+.week-badge{font-size:11px;font-weight:500;padding:2px 9px;border-radius:12px}
+.wb1{background:#E6F1FB;color:#185FA5}
+.wb2{background:#EEEDFE;color:#3C3489}
+.wb3{background:#E1F5EE;color:#0F6E56}
+.wb4{background:#FAEEDA;color:#854F0B}
+
+.day-row{display:flex;gap:0;padding:0 1.25rem;margin-bottom:6px}
+.day-num-col{width:56px;padding-top:2px;flex-shrink:0}
+.day-badge{width:42px;height:22px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500}
+.db1{background:#E6F1FB;color:#0C447C}
+.db2{background:#EEEDFE;color:#3C3489}
+.db3{background:#E1F5EE;color:#085041}
+.db4{background:#FAEEDA;color:#633806}
+
+.day-card{flex:1;border:0.5px solid var(--color-border-tertiary);border-radius:8px;padding:8px 12px;background:var(--color-background-primary)}
+.day-card.milestone{border-color:#1D9E75;border-width:0.5px}
+.task-list{display:flex;flex-direction:column;gap:5px}
+.task-item{display:flex;gap:6px;align-items:flex-start;font-size:12.5px;color:var(--color-text-primary);line-height:1.45}
+.stag{font-size:10px;font-weight:500;padding:1px 6px;border-radius:10px;white-space:nowrap;margin-top:1.5px;flex-shrink:0}
+.ta{background:#E6F1FB;color:#185FA5}
+.tb{background:#EEEDFE;color:#3C3489}
+.tc{background:#E1F5EE;color:#0F6E56}
+.tall{background:#F1EFE8;color:#444441}
+
+.del-strip{display:flex;align-items:flex-start;gap:6px;margin-top:7px;padding-top:6px;border-top:0.5px solid var(--color-border-tertiary);font-size:11.5px;color:var(--color-text-secondary)}
+.warn-strip{display:flex;align-items:flex-start;gap:6px;margin-top:5px;padding-top:5px;border-top:0.5px solid var(--color-border-tertiary);font-size:11px;color:#854F0B}
+
+.task-item.hidden{display:none}
+.day-row.hide-day{display:none}
+
+code{font-family:var(--font-mono);font-size:11px;background:var(--color-background-secondary);padding:1px 4px;border-radius:4px}
+</style>
+
+<h2 class="sr-only">30-day day-by-day work plan for Month 1 of the Engineering Blueprint project</h2>
+
+<div class="top-bar">
+  <div style="font-size:16px;font-weight:500;color:var(--color-text-primary)">Month 1 — All 30 Days</div>
+  <div class="top-meta">
+    <span class="pill pill-blue"><i class="ti ti-calendar" aria-hidden="true"></i> Phase 1: Foundation & Infrastructure</span>
+    <span class="pill pill-amber"><i class="ti ti-users" aria-hidden="true"></i> 3 Students · Optimal config</span>
+    <span class="pill pill-teal"><i class="ti ti-flag" aria-hidden="true"></i> 4 milestone deliverables</span>
+  </div>
+</div>
+
+<div class="filter-bar">
+  <span style="font-size:12px;color:var(--color-text-secondary);margin-right:2px;padding-top:4px">Filter:</span>
+  <button class="fbtn on all-s" onclick="filterTasks('all-s')">All students</button>
+  <button class="fbtn sa" onclick="filterTasks('sa')">Student A — Backend</button>
+  <button class="fbtn sb" onclick="filterTasks('sb')">Student B — ML/Integration</button>
+  <button class="fbtn sc" onclick="filterTasks('sc')">Student C — Frontend/DevOps</button>
+</div>
+
+<div class="week-header">
+  <span class="week-label">Week 1</span><div class="week-line"></div>
+  <span class="week-badge wb1">Docker Scaffolding · Days 1–7</span>
+</div>
+
+<div class="day-row"><div class="day-num-col"><div class="day-badge db1">Day 1</div></div><div class="day-card"><div class="task-list">
+  <div class="task-item tall"><span class="stag tall">All</span>Team kickoff — agree on branch strategy: <code>main / dev / feature/*</code>. Install Docker Desktop on all machines.</div>
+  <div class="task-item ta"><span class="stag ta">A</span>Create GitHub repo, initialise README, configure branch protection rules on <code>main</code> (require PR reviews).</div>
+</div></div></div>
+
+<div class="day-row"><div class="day-num-col"><div class="day-badge db1">Day 2</div></div><div class="day-card"><div class="task-list">
+  <div class="task-item ta"><span class="stag ta">A</span>Write <code>docker-compose.yml</code> — add <code>postgres</code>, <code>redis</code>, <code>rabbitmq</code>, <code>minio</code> containers. Configure named volumes and shared network.</div>
+  <div class="task-item tc"><span class="stag tc">C</span>Write <code>.env.example</code> with all required variables (DB credentials, JWT secret, MinIO keys). Add inline comments for each.</div>
+</div></div></div>
+
+<div class="day-row"><div class="day-num-col"><div class="day-badge db1">Day 3</div></div><div class="day-card"><div class="task-list">
+  <div class="task-item ta"><span class="stag ta">A</span>Configure <code>Makefile</code> targets: <code>make up</code>, <code>make down</code>, <code>make logs</code>. Verify all 4 infra containers start and become healthy.</div>
+  <div class="task-item tb"><span class="stag tb">B</span>Scaffold FastAPI gateway project. Add <code>GET /health</code> returning <code>{"status":"ok","version":"0.1.0"}</code>. Add <code>requirements.txt</code>.</div>
+</div></div></div>
+
+<div class="day-row"><div class="day-num-col"><div class="day-badge db1">Day 4</div></div><div class="day-card"><div class="task-list">
+  <div class="task-item tc"><span class="stag tc">C</span>Scaffold Next.js 14 (App Router). Create folder structure: <code>app/</code>, <code>components/</code>, <code>lib/</code>, <code>public/</code>. Install Tailwind CSS.</div>
+  <div class="task-item tb"><span class="stag tb">B</span>Add FastAPI gateway service to <code>docker-compose.yml</code>. Verify it connects to postgres and redis on startup.</div>
+</div></div></div>
+
+<div class="day-row"><div class="day-num-col"><div class="day-badge db1">Day 5</div></div><div class="day-card"><div class="task-list">
+  <div class="task-item ta"><span class="stag ta">A</span>Resolve Docker networking issues — WSL2 port conflicts especially. Confirm all 5 containers (infra + gateway) are simultaneously healthy.</div>
+  <div class="task-item tc"><span class="stag tc">C</span>Set up GitHub Actions CI: Python linting with <code>ruff</code>, JS linting with <code>eslint</code>. Push first passing CI run.</div>
+</div><div class="warn-strip"><i class="ti ti-alert-triangle" style="font-size:13px;margin-top:1px" aria-hidden="true"></i>Allocate 4h buffer for WSL2 port conflicts — common first-week blocker</div></div></div>
+
+<div class="day-row"><div class="day-num-col"><div class="day-badge db1">Day 6</div></div><div class="day-card"><div class="task-list">
+  <div class="task-item tc"><span class="stag tc">C</span>Add Next.js to <code>docker-compose.yml</code>. Build placeholder homepage with project name and navigation shell.</div>
+  <div class="task-item tb"><span class="stag tb">B</span>Verify FastAPI <code>/health</code> is reachable from Next.js (inside Docker network). Configure CORS headers to allow <code>http://localhost:3000</code>.</div>
+</div></div></div>
+
+<div class="day-row"><div class="day-num-col"><div class="day-badge db1">Day 7</div></div><div class="day-card milestone"><div class="task-list">
+  <div class="task-item tall"><span class="stag tall">All</span>Integration day: run <code>make up</code>. Verify 6 containers green. Hit <code>/health</code> → 200. Confirm Next.js loads in browser.</div>
+  <div class="task-item tall"><span class="stag tall">All</span>Commit all files. Tag release <code>v0.1.0-infra-scaffold</code>. Push to GitHub.</div>
+</div><div class="del-strip"><i class="ti ti-check" style="color:var(--color-text-success);font-size:13px;margin-top:1px" aria-hidden="true"></i><span><strong>Milestone:</strong> All infra containers healthy · <code>/health</code> returns 200 · Next.js placeholder live</span></div></div></div>
+
+<div class="week-header">
+  <span class="week-label">Week 2</span><div class="week-line"></div>
+  <span class="week-badge wb2">Database Schema · Days 8–14</span>
+</div>
+
+<div class="day-row"><div class="day-num-col"><div class="day-badge db2">Day 8</div></div><div class="day-card"><div class="task-list">
+  <div class="task-item ta"><span class="stag ta">A</span>Write SQLAlchemy ORM models for core tables: <code>users</code>, <code>sessions</code>, <code>jobs</code>. Define columns, types, and foreign keys.</div>
+  <div class="task-item tb"><span class="stag tb">B</span>Write shared Pydantic DTOs (request/response schemas). Init <code>shared/</code> Python package with <code>pyproject.toml</code> for editable install.</div>
+</div></div></div>
+
+<div class="day-row"><div class="day-num-col"><div class="day-badge db2">Day 9</div></div><div class="day-card"><div class="task-list">
+  <div class="task-item ta"><span class="stag ta">A</span>Continue ORM models: <code>detection_results</code>, <code>text_results</code>, <code>image_results</code>, <code>audio_results</code>, <code>reports</code>. Add all indexes.</div>
+  <div class="task-item tc"><span class="stag tc">C</span>Configure editable install (<code>pip install -e ./shared</code>). Verify both FastAPI gateway and future services can <code>import shared</code> cleanly.</div>
+</div></div></div>
+
+<div class="day-row"><div class="day-num-col"><div class="day-badge db2">Day 10</div></div><div class="day-card"><div class="task-list">
+  <div class="task-item ta"><span class="stag ta">A</span>Write Alembic migration files 001–004. Add <code>IF NOT EXISTS</code> guards for all <code>CREATE TYPE</code> statements to prevent enum conflicts on re-runs.</div>
+  <div class="task-item tb"><span class="stag tb">B</span>Peer-review ORM models with Student A. Complete remaining Pydantic DTOs to cover all 8 tables.</div>
+</div></div></div>
+
+<div class="day-row"><div class="day-num-col"><div class="day-badge db2">Day 11</div></div><div class="day-card"><div class="task-list">
+  <div class="task-item ta"><span class="stag ta">A</span>Write Alembic migration files 005–008. Run <code>alembic upgrade head</code>. Verify all indexes created via <code>\d+ table_name</code> in psql.</div>
+  <div class="task-item tc"><span class="stag tc">C</span>Add GitHub Actions step: run <code>alembic check</code> on every PR. CI must fail if models and migrations are out of sync.</div>
+</div></div></div>
+
+<div class="day-row"><div class="day-num-col"><div class="day-badge db2">Day 12</div></div><div class="day-card"><div class="task-list">
+  <div class="task-item ta"><span class="stag ta">A</span>Test full <code>alembic downgrade base</code> then <code>alembic upgrade head</code> cycle. Confirm all 8 migrations are idempotent and reversible.</div>
+  <div class="task-item tb"><span class="stag tb">B</span>Write <code>scripts/seed_db.py</code> — inserts 2 test users, 5 sample jobs, sample results for local dev and testing.</div>
+</div></div></div>
+
+<div class="day-row"><div class="day-num-col"><div class="day-badge db2">Day 13</div></div><div class="day-card"><div class="task-list">
+  <div class="task-item tc"><span class="stag tc">C</span>Add <code>GET /health/db</code> endpoint to FastAPI — executes a lightweight <code>SELECT 1</code> against postgres and returns connection status.</div>
+  <div class="task-item tb"><span class="stag tb">B</span>Write <code>docs/database-schema.md</code> — document all 8 tables with field names, types, constraints and entity relationships.</div>
+</div></div></div>
+
+<div class="day-row"><div class="day-num-col"><div class="day-badge db2">Day 14</div></div><div class="day-card milestone"><div class="task-list">
+  <div class="task-item tall"><span class="stag tall">All</span>Review all 8 tables together. Open a test PR with a dummy model change — confirm CI correctly blocks it on <code>alembic check</code> failure.</div>
+  <div class="task-item tall"><span class="stag tall">All</span>Merge to <code>dev</code>. Tag release <code>v0.2.0-db-schema</code>.</div>
+</div><div class="del-strip"><i class="ti ti-check" style="color:var(--color-text-success);font-size:13px;margin-top:1px" aria-hidden="true"></i><span><strong>Milestone:</strong> All 8 tables verified · <code>alembic current</code> shows head · CI blocks migration drift</span></div></div></div>
+
+<div class="week-header">
+  <span class="week-label">Week 3</span><div class="week-line"></div>
+  <span class="week-badge wb3">Auth Service & JWT Flow · Days 15–21</span>
+</div>
+
+<div class="day-row"><div class="day-num-col"><div class="day-badge db3">Day 15</div></div><div class="day-card"><div class="task-list">
+  <div class="task-item ta"><span class="stag ta">A</span>Build <code>auth-service</code> FastAPI app. Implement <code>POST /auth/register</code>: validate email uniqueness, hash password with bcrypt, insert user row.</div>
+  <div class="task-item tc"><span class="stag tc">C</span>Build Next.js register page: form with name, email, password fields, client-side validation, and error messages.</div>
+</div></div></div>
+
+<div class="day-row"><div class="day-num-col"><div class="day-badge db3">Day 16</div></div><div class="day-card"><div class="task-list">
+  <div class="task-item ta"><span class="stag ta">A</span>Implement <code>POST /auth/login</code>: verify bcrypt hash, generate JWT access token (15min expiry) + refresh token (7 days). Store refresh token in Redis.</div>
+  <div class="task-item tb"><span class="stag tb">B</span>Write JWT utility module: <code>create_token()</code>, <code>verify_token()</code>, <code>extract_claims()</code>. Unit-test each function independently.</div>
+</div></div></div>
+
+<div class="day-row"><div class="day-num-col"><div class="day-badge db3">Day 17</div></div><div class="day-card"><div class="task-list">
+  <div class="task-item ta"><span class="stag ta">A</span>Implement <code>POST /auth/refresh</code>: validate refresh token key in Redis, issue new access token. Implement <code>POST /auth/logout</code>: delete refresh key from Redis.</div>
+  <div class="task-item tc"><span class="stag tc">C</span>Build Next.js login page. Implement token storage in <code>httpOnly</code> cookie on response from login API. Handle login errors (401, 422).</div>
+</div></div></div>
+
+<div class="day-row"><div class="day-num-col"><div class="day-badge db3">Day 18</div></div><div class="day-card"><div class="task-list">
+  <div class="task-item tb"><span class="stag tb">B</span>Integrate auth into API Gateway: add <code>Depends(get_current_user)</code> middleware. Create <code>GET /api/v1/auth/me</code> protected endpoint returning current user profile.</div>
+  <div class="task-item tc"><span class="stag tc">C</span>Fix CORS between Next.js (port 3000) and FastAPI (port 8000). Set <code>allow_credentials=True</code>, configure allowed origins precisely.</div>
+</div><div class="warn-strip"><i class="ti ti-alert-triangle" style="font-size:13px;margin-top:1px" aria-hidden="true"></i>CORS with <code>httpOnly</code> cookies is tricky — allocate 4h buffer for this day</div></div></div>
+
+<div class="day-row"><div class="day-num-col"><div class="day-badge db3">Day 19</div></div><div class="day-card"><div class="task-list">
+  <div class="task-item ta"><span class="stag ta">A</span>Write 12 pytest unit tests covering: register, login, failed login (wrong password), refresh, logout, access protected route, expired token → 401, missing token → 401.</div>
+  <div class="task-item tc"><span class="stag tc">C</span>Build protected route middleware in Next.js: check for JWT cookie, redirect unauthenticated users to <code>/login</code>. Wrap dashboard pages.</div>
+</div></div></div>
+
+<div class="day-row"><div class="day-num-col"><div class="day-badge db3">Day 20</div></div><div class="day-card"><div class="task-list">
+  <div class="task-item tb"><span class="stag tb">B</span>Add <code>auth-service</code> to <code>docker-compose.yml</code>. Verify gateway can call auth-service using Docker internal DNS. Test full service-to-service auth flow.</div>
+  <div class="task-item tc"><span class="stag tc">C</span>Add pytest auth tests to GitHub Actions CI. All 12 tests must pass on every PR before merge is allowed.</div>
+</div></div></div>
+
+<div class="day-row"><div class="day-num-col"><div class="day-badge db3">Day 21</div></div><div class="day-card milestone"><div class="task-list">
+  <div class="task-item tall"><span class="stag tall">All</span>Full end-to-end manual test: register → login → call <code>/api/v1/auth/me</code> → logout → confirm next request returns 401.</div>
+  <div class="task-item tall"><span class="stag tall">All</span>Confirm all 12 unit tests pass in CI. Merge to <code>dev</code>. Tag <code>v0.3.0-auth</code>.</div>
+</div><div class="del-strip"><i class="ti ti-check" style="color:var(--color-text-success);font-size:13px;margin-top:1px" aria-hidden="true"></i><span><strong>Milestone:</strong> Complete auth flow working · 12 tests passing · JWT + <code>httpOnly</code> cookies</span></div></div></div>
+
+<div class="week-header">
+  <span class="week-label">Week 4</span><div class="week-line"></div>
+  <span class="week-badge wb4">MinIO Storage & RabbitMQ Queues · Days 22–30</span>
+</div>
+
+<div class="day-row"><div class="day-num-col"><div class="day-badge db4">Day 22</div></div><div class="day-card"><div class="task-list">
+  <div class="task-item ta"><span class="stag ta">A</span>Implement <code>StorageService</code> class: <code>upload_file()</code> using MinIO <code>put_object</code>, <code>download_file()</code> using <code>get_object</code>, <code>generate_presigned_url()</code>.</div>
+  <div class="task-item tc"><span class="stag tc">C</span>Build Next.js <code>UploadDropzone</code> component using <code>react-dropzone</code>. Support drag-and-drop and click-to-browse. Show file name and size preview.</div>
+</div></div></div>
+
+<div class="day-row"><div class="day-num-col"><div class="day-badge db4">Day 23</div></div><div class="day-card"><div class="task-list">
+  <div class="task-item ta"><span class="stag ta">A</span>Implement <code>QueueService</code> class: <code>publish(queue_name, payload)</code> method publishing JSON messages to RabbitMQ. Test with <code>text_jobs</code>, <code>image_jobs</code>, <code>audio_jobs</code> queues.</div>
+  <div class="task-item tb"><span class="stag tb">B</span>Add <code>python-magic</code> MIME validation to Dockerfiles: install <code>libmagic1</code> system package. Without this, MIME detection silently returns wrong types.</div>
+</div></div></div>
+
+<div class="day-row"><div class="day-num-col"><div class="day-badge db4">Day 24</div></div><div class="day-card"><div class="task-list">
+  <div class="task-item ta"><span class="stag ta">A</span>Write <code>POST /api/v1/detect/image</code>: validate MIME → upload to MinIO → create <code>job</code> row in DB (status=queued) → publish to <code>image_jobs</code> queue → return 202 + job_id.</div>
+  <div class="task-item tc"><span class="stag tc">C</span>After upload, display job ID badge and status chip (Queued) in the UI. Show loading spinner while awaiting first status poll.</div>
+</div></div></div>
+
+<div class="day-row"><div class="day-num-col"><div class="day-badge db4">Day 25</div></div><div class="day-card"><div class="task-list">
+  <div class="task-item tb"><span class="stag tb">B</span>Implement <code>GET /api/v1/jobs/{id}</code>: return job status, <code>created_at</code>, <code>updated_at</code>, and <code>result_id</code> if complete. Return 404 for unknown job IDs.</div>
+  <div class="task-item tc"><span class="stag tc">C</span>Build <code>JobStatusCard</code> component: polls <code>/jobs/{id}</code> every 3 seconds. Renders state machine: Queued → Processing → Complete / Failed. Stops polling on terminal state.</div>
+</div></div></div>
+
+<div class="day-row"><div class="day-num-col"><div class="day-badge db4">Day 26</div></div><div class="day-card"><div class="task-list">
+  <div class="task-item ta"><span class="stag ta">A</span>Write stub RabbitMQ consumer: reads from <code>image_jobs</code> queue, logs message payload, waits 2 seconds, then updates job status to <code>complete</code> in DB.</div>
+  <div class="task-item tb"><span class="stag tb">B</span>Add MinIO bucket auto-creation on startup: ensure buckets <code>uploads</code> and <code>reports</code> exist before any service accepts requests. Add to <code>startup</code> event handler.</div>
+</div></div></div>
+
+<div class="day-row"><div class="day-num-col"><div class="day-badge db4">Day 27</div></div><div class="day-card"><div class="task-list">
+  <div class="task-item tc"><span class="stag tc">C</span>Write <code>POST /api/v1/detect/text</code> and <code>POST /api/v1/detect/audio</code> stub endpoints — same pattern as image. Wire into frontend upload flow.</div>
+  <div class="task-item tb"><span class="stag tb">B</span>Write integration test: upload test JPEG → assert MinIO object exists → assert DB job row exists (status=queued) → assert RabbitMQ <code>image_jobs</code> queue has 1 message.</div>
+</div></div></div>
+
+<div class="day-row"><div class="day-num-col"><div class="day-badge db4">Day 28</div></div><div class="day-card"><div class="task-list">
+  <div class="task-item ta"><span class="stag ta">A</span>Debug edge cases: file size limits (add 10MB cap), upload timeouts, RabbitMQ message serialisation issues. Add 413 / 415 / 503 error responses.</div>
+  <div class="task-item tb"><span class="stag tb">B</span>Add comprehensive error handling to the detect endpoints: wrong MIME type (415), file too large (413), queue unavailable (503 with retry-after header).</div>
+  <div class="task-item tc"><span class="stag tc">C</span>Add upload progress bar to <code>UploadDropzone</code>. Handle upload failure state — show retry button with error message.</div>
+</div></div></div>
+
+<div class="day-row"><div class="day-num-col"><div class="day-badge db4">Day 29</div></div><div class="day-card"><div class="task-list">
+  <div class="task-item tall"><span class="stag tall">All</span>Full system test: upload a text file, image, and audio stub from the Next.js frontend. Verify all 3 queues receive messages and all 3 jobs transition to complete in the UI.</div>
+  <div class="task-item tall"><span class="stag tall">All</span>Fix any remaining bugs. Update README setup guide. Run <code>alembic check</code> — confirm no migration drift.</div>
+</div></div></div>
+
+<div class="day-row"><div class="day-num-col"><div class="day-badge db4">Day 30</div></div><div class="day-card milestone"><div class="task-list">
+  <div class="task-item tall"><span class="stag tall">All</span>Live demo: upload file from Next.js → <code>JobStatusCard</code> polls → status flips to Complete → confirm object in MinIO, job row in DB, and queue message consumed by stub.</div>
+  <div class="task-item tall"><span class="stag tall">All</span>Month 1 retrospective. Document blockers and lessons learned. Tag release <code>v0.4.0-month1-complete</code>. Prep for Month 2: Text Modality & RAID dataset.</div>
+</div><div class="del-strip"><i class="ti ti-check" style="color:var(--color-text-success);font-size:13px;margin-top:1px" aria-hidden="true"></i><span><strong>Milestone:</strong> Full upload pipeline · Job status polling in UI · All 3 queue stubs operational</span></div></div></div>
+
+<div style="display:flex;gap:8px;padding:0.75rem 1.25rem 1rem;border-top:0.5px solid var(--color-border-tertiary);margin-top:6px;flex-wrap:wrap">
+  <span style="font-size:11px;color:var(--color-text-secondary)">Legend:</span>
+  <span class="pill" style="background:#E6F1FB;color:#185FA5;font-size:11px">A — Backend/infra</span>
+  <span class="pill" style="background:#EEEDFE;color:#3C3489;font-size:11px">B — ML/integration</span>
+  <span class="pill" style="background:#E1F5EE;color:#0F6E56;font-size:11px">C — Frontend/DevOps</span>
+  <span class="pill" style="background:#F1EFE8;color:#444441;font-size:11px">All — Full team</span>
+  <span class="pill" style="background:transparent;color:var(--color-text-secondary);border:0.5px solid #1D9E75;font-size:11px">Green border = milestone day</span>
+</div>
+
+<script>
+function filterTasks(f){
+  document.querySelectorAll('.fbtn').forEach(b=>b.classList.remove('on','all','sa','sb','sc','all-s'));
+  const btn=event.currentTarget;
+  btn.classList.add('on',f);
+
+  document.querySelectorAll('.day-row').forEach(row=>{
+    const tasks=row.querySelectorAll('.task-item');
+    let anyVisible=false;
+    tasks.forEach(t=>{
+      if(f==='all-s'){t.classList.remove('hidden');anyVisible=true;return;}
+      const hasSA=t.querySelector('.ta');
+      const hasSB=t.querySelector('.tb');
+      const hasSC=t.querySelector('.tc');
+      const hasAll=t.querySelector('.tall');
+      let show=false;
+      if(f==='sa') show=!!(hasSA||hasAll);
+      if(f==='sb') show=!!(hasSB||hasAll);
+      if(f==='sc') show=!!(hasSC||hasAll);
+      t.classList.toggle('hidden',!show);
+      if(show) anyVisible=true;
+    });
+    row.classList.toggle('hide-day',!anyVisible);
+  });
+}
+</script>

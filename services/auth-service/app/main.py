@@ -1,7 +1,7 @@
 import structlog
 from fastapi import FastAPI
 from app.core.config import settings
-from app.api import health
+from app.api import health, auth
 
 # Configure structured logging
 structlog.configure(
@@ -23,6 +23,7 @@ app = FastAPI(
 )
 
 app.include_router(health.router, prefix="/internal")
+app.include_router(auth.router, prefix=settings.API_V1_STR)
 
 @app.on_event("startup")
 async def startup_event():

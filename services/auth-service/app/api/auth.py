@@ -40,11 +40,12 @@ async def register(
     return {"message": "User created successfully", "user_id": new_user.id}
 
 
-@router.post("/login", response_model=Token)
+@router.post("/login")
 @limiter.limit("20/minute")
 async def login(
-    request: Request, user_in: UserLogin, db: AsyncSession = Depends(get_async_session)
+    request: Request, response: Response, user_in: UserLogin, db: AsyncSession = Depends(get_async_session)
 ):
+    from app.core.config import settings
     stmt = select(User).where(User.email == user_in.email)
     result = await db.execute(stmt)
     user = result.scalars().first()
@@ -68,18 +69,37 @@ async def login(
     # Store refresh token in redis
     await redis.store_refresh_token(str(user.id), refresh_token)
 
-    return {
-        "access_token": access_token,
-        "refresh_token": refresh_token,
-        "token_type": "bearer",
-    }
+    response.set_cookie(
+        key="access_token",
+        value=access_token,
+        max_age=settings.ACCESS_TOKEN_EXPIRE_MINUTES * 60,
+        httponly=True,
+        secure=False,
+        samesite="lax",
+        path="/"
+    )
+    response.set_cookie(
+        key="refresh_token",
+        value=refresh_token,
+        max_age=settings.REFRESH_TOKEN_EXPIRE_DAYS * 24 * 3600,
+        httponly=True,
+        secure=False,
+        samesite="lax",
+        path="/api/v1/auth"
+    )
+
+    return {"message": "Successfully logged in", "token_type": "cookie"}
 
 
-@router.post("/refresh", response_model=Token)
+@router.post("/refresh")
 async def refresh_token(
-    request: RefreshTokenRequest, db: AsyncSession = Depends(get_async_session)
+    request: Request, response: Response, db: AsyncSession = Depends(get_async_session)
 ):
-    token = request.refresh_token
+    from app.core.config import settings
+    token = request.cookies.get("refresh_token")
+    if not token:
+        raise HTTPException(status_code=401, detail="Refresh token missing")
+
     # Verify signature
     decoded = security.verify_token(token)
     if not decoded or decoded.get("type") != "refresh":
@@ -114,14 +134,35 @@ async def refresh_token(
 
     await redis.store_refresh_token(str(user.id), new_refresh_token)
 
-    return {
-        "access_token": new_access_token,
-        "refresh_token": new_refresh_token,
-        "token_type": "bearer",
-    }
+    response.set_cookie(
+        key="access_token",
+        value=new_access_token,
+        max_age=settings.ACCESS_TOKEN_EXPIRE_MINUTES * 60,
+        httponly=True,
+        secure=False,
+        samesite="lax",
+        path="/"
+    )
+    response.set_cookie(
+        key="refresh_token",
+        value=new_refresh_token,
+        max_age=settings.REFRESH_TOKEN_EXPIRE_DAYS * 24 * 3600,
+        httponly=True,
+        secure=False,
+        samesite="lax",
+        path="/api/v1/auth"
+    )
+
+    return {"message": "Successfully refreshed", "token_type": "cookie"}
 
 
 @router.post("/logout")
-async def logout(request: RefreshTokenRequest):
-    await redis.delete_refresh_token(request.refresh_token)
+async def logout(request: Request, response: Response):
+    token = request.cookies.get("refresh_token")
+    if token:
+        await redis.delete_refresh_token(token)
+        
+    response.delete_cookie("access_token", path="/")
+    response.delete_cookie("refresh_token", path="/api/v1/auth")
+    
     return {"message": "Successfully logged out"}

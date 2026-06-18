@@ -8,17 +8,24 @@ from app.api.deps import get_current_user
 router = APIRouter(tags=["auth"])
 
 
-async def proxy_request(method: str, path: str, json_data: dict = None):
+async def proxy_request(method: str, path: str, request: Request, json_data: dict = None):
     url = f"{settings.AUTH_SERVICE_URL}{path}"
     async with httpx.AsyncClient() as client:
         try:
-            req = client.build_request(method, url, json=json_data)
+            req = client.build_request(method, url, json=json_data, cookies=request.cookies)
             resp = await client.send(req)
-            return Response(
+            
+            response = Response(
                 content=resp.content,
                 status_code=resp.status_code,
                 media_type=resp.headers.get("content-type"),
             )
+            
+            # Forward Set-Cookie headers
+            for cookie in resp.headers.get_list("set-cookie"):
+                response.headers.append("Set-Cookie", cookie)
+                
+            return response
         except httpx.RequestError as exc:
             raise HTTPException(
                 status_code=503, detail=f"Auth service unavailable: {exc}"
@@ -28,25 +35,23 @@ async def proxy_request(method: str, path: str, json_data: dict = None):
 @router.post("/register")
 async def proxy_register(request: Request):
     data = await request.json()
-    return await proxy_request("POST", "/register", data)
+    return await proxy_request("POST", "/register", request, json_data=data)
 
 
 @router.post("/login")
 async def proxy_login(request: Request):
     data = await request.json()
-    return await proxy_request("POST", "/login", data)
+    return await proxy_request("POST", "/login", request, json_data=data)
 
 
 @router.post("/refresh")
 async def proxy_refresh(request: Request):
-    data = await request.json()
-    return await proxy_request("POST", "/refresh", data)
+    return await proxy_request("POST", "/refresh", request)
 
 
 @router.post("/logout")
 async def proxy_logout(request: Request):
-    data = await request.json()
-    return await proxy_request("POST", "/logout", data)
+    return await proxy_request("POST", "/logout", request)
 
 
 @router.get("/me")

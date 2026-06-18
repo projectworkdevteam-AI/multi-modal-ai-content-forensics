@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { api } from "@/lib/apiClient";
-import Cookies from "js-cookie";
 
 import { UploadDropzone } from "@/components/upload/UploadDropzone";
 import { JobStatusCard } from "@/components/upload/JobStatusCard";
@@ -33,15 +32,10 @@ export default function DashboardPage() {
 
   const handleLogout = async () => {
     try {
-      const refreshToken = Cookies.get("refresh_token");
-      if (refreshToken) {
-        await api.post("/auth/logout", { refresh_token: refreshToken });
-      }
+      await api.post("/auth/logout");
     } catch (err) {
       console.error("Logout error", err);
     } finally {
-      Cookies.remove("access_token", { path: "/" });
-      Cookies.remove("refresh_token", { path: "/" });
       router.push("/login");
     }
   };

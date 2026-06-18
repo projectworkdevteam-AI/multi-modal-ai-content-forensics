@@ -5,7 +5,6 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { useRouter } from "next/navigation";
-import Cookies from "js-cookie";
 import { api } from "@/lib/apiClient";
 import Link from "next/link";
 
@@ -33,9 +32,7 @@ export default function LoginPage() {
     setLoading(true);
     setError(null);
     try {
-      const res = await api.post("/auth/login", data);
-      Cookies.set("access_token", res.access_token, { path: "/" });
-      Cookies.set("refresh_token", res.refresh_token, { path: "/" });
+      await api.post("/auth/login", data);
       router.push("/dashboard");
     } catch (err: any) {
       setError(err.data?.detail || "Invalid email or password");

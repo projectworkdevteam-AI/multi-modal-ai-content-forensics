@@ -20,12 +20,12 @@ Start-Sleep -Seconds 10
 # 2. Start Backend APIs
 Write-Host "Starting API Gateway and Auth Service..."
 $env:PYTHONPATH = $RootDir
-Start-Process -NoNewWindow -WorkingDirectory "$RootDir\services\auth-service" -FilePath "..\..\.venv\Scripts\python.exe" -ArgumentList "-m uvicorn app.main:app --host 0.0.0.0 --port 8001"
-Start-Process -NoNewWindow -WorkingDirectory "$RootDir\services\api-gateway" -FilePath "..\..\.venv\Scripts\python.exe" -ArgumentList "-m uvicorn app.main:app --host 0.0.0.0 --port 8000"
+Start-Process -NoNewWindow -WorkingDirectory "$RootDir\services\auth-service" -FilePath "$RootDir\.venv\Scripts\python.exe" -ArgumentList "-m uvicorn app.main:app --host 0.0.0.0 --port 8001"
+Start-Process -NoNewWindow -WorkingDirectory "$RootDir\services\api-gateway" -FilePath "$RootDir\.venv\Scripts\python.exe" -ArgumentList "-m uvicorn app.main:app --host 0.0.0.0 --port 8000"
 
 # 3. Start Stub Consumer
 Write-Host "Starting Stub Consumer..."
-Start-Process -NoNewWindow -WorkingDirectory "$RootDir" -FilePath ".venv\Scripts\python.exe" -ArgumentList "services\stub-consumer\main.py"
+Start-Process -NoNewWindow -WorkingDirectory "$RootDir" -FilePath "$RootDir\.venv\Scripts\python.exe" -ArgumentList "services\stub-consumer\main.py"
 
 # Wait for APIs
 Start-Sleep -Seconds 5

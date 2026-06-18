@@ -11,7 +11,7 @@ from shared.db.models.job import Job, JobStatus
 
 logger = structlog.get_logger()
 
-RABBITMQ_URL = os.getenv("RABBITMQ_URL", "amqp://forensics:change_me_in_production@localhost:5672/")
+RABBITMQ_URL = os.environ["RABBITMQ_URL"]
 QUEUE_NAME = os.getenv("QUEUE_IMAGE_DETECTION", "image-detection-queue")
 
 async def process_message(message: aio_pika.IncomingMessage):

@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, UploadFile, File, HTTPException, status
+from fastapi import APIRouter, Depends, UploadFile, File, HTTPException, status, Request
 from sqlalchemy.ext.asyncio import AsyncSession
 import uuid
 import magic
@@ -10,6 +10,7 @@ from shared.db.models.job import Job, JobStatus, ModalityType
 from app.core.storage import storage
 from app.core.queue import queue_service
 from app.core.config import settings
+from app.core.limiter import limiter
 
 router = APIRouter()
 
@@ -17,7 +18,9 @@ MAX_FILE_SIZE = 20 * 1024 * 1024  # 20 MB
 ALLOWED_MIME_TYPES = {"image/jpeg", "image/png", "image/webp"}
 
 @router.post("/image", status_code=status.HTTP_202_ACCEPTED)
+@limiter.limit("20/minute")
 async def detect_image(
+    request: Request,
     file: UploadFile = File(...),
     db: AsyncSession = Depends(get_async_session),
     current_user: Dict[str, Any] = Depends(get_current_user)

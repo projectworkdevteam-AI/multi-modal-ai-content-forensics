@@ -20,7 +20,7 @@ target_metadata = Base.metadata
 
 def get_url() -> str:
     POSTGRES_USER = os.getenv("POSTGRES_USER", "forensics_user")
-    POSTGRES_PASSWORD = os.getenv("POSTGRES_PASSWORD", "change_me_in_production")
+    POSTGRES_PASSWORD = os.environ["POSTGRES_PASSWORD"]
     POSTGRES_HOST = os.getenv("POSTGRES_HOST", "localhost")
     POSTGRES_PORT = os.getenv("POSTGRES_PORT", "5432")
     POSTGRES_DB = os.getenv("POSTGRES_DB", "forensics_db")

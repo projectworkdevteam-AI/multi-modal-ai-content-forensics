@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status, Request
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 import uuid
@@ -8,11 +8,13 @@ from shared.db.models.user import User
 from shared.schemas.auth import UserCreate, UserLogin, Token, RefreshTokenRequest
 from app.core import security
 from app.core import redis
+from app.core.limiter import limiter
 
 router = APIRouter(tags=["auth"])
 
 @router.post("/register", status_code=status.HTTP_201_CREATED)
-async def register(user_in: UserCreate, db: AsyncSession = Depends(get_async_session)):
+@limiter.limit("20/minute")
+async def register(request: Request, user_in: UserCreate, db: AsyncSession = Depends(get_async_session)):
     # Check if user exists
     stmt = select(User).where(User.email == user_in.email)
     result = await db.execute(stmt)
@@ -35,7 +37,8 @@ async def register(user_in: UserCreate, db: AsyncSession = Depends(get_async_ses
     return {"message": "User created successfully", "user_id": new_user.id}
 
 @router.post("/login", response_model=Token)
-async def login(user_in: UserLogin, db: AsyncSession = Depends(get_async_session)):
+@limiter.limit("20/minute")
+async def login(request: Request, user_in: UserLogin, db: AsyncSession = Depends(get_async_session)):
     stmt = select(User).where(User.email == user_in.email)
     result = await db.execute(stmt)
     user = result.scalars().first()

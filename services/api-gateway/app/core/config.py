@@ -11,12 +11,12 @@ class Settings(BaseSettings):
     # Storage Config
     MINIO_ENDPOINT: str = "localhost:9000"
     MINIO_ACCESS_KEY: str = "minioadmin"
-    MINIO_SECRET_KEY: str = "minioadmin_secret"
+    MINIO_SECRET_KEY: str
     MINIO_SECURE: bool = False
     MINIO_BUCKET_UPLOADS: str = "forensics-uploads"
     
     # Queue Config
-    RABBITMQ_URL: str = "amqp://forensics:change_me_in_production@localhost:5672/"
+    RABBITMQ_URL: str
     QUEUE_IMAGE_DETECTION: str = "image-detection-queue"
     model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8", extra="ignore")
 

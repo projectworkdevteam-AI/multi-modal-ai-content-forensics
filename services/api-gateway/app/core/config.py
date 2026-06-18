@@ -6,7 +6,18 @@ class Settings(BaseSettings):
     API_V1_STR: str = "/api/v1"
     JWT_SECRET_KEY: str
     JWT_ALGORITHM: str = "HS256"
-    AUTH_SERVICE_URL: str = "http://localhost:8000/api/v1/auth"    
+    AUTH_SERVICE_URL: str = "http://localhost:8000/api/v1/auth"
+    
+    # Storage Config
+    MINIO_ENDPOINT: str = "localhost:9000"
+    MINIO_ACCESS_KEY: str = "minioadmin"
+    MINIO_SECRET_KEY: str = "minioadmin_secret"
+    MINIO_SECURE: bool = False
+    MINIO_BUCKET_UPLOADS: str = "forensics-uploads"
+    
+    # Queue Config
+    RABBITMQ_URL: str = "amqp://forensics:change_me_in_production@localhost:5672/"
+    QUEUE_IMAGE_DETECTION: str = "image-detection-queue"
     model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8", extra="ignore")
 
 settings = Settings()

@@ -2,6 +2,7 @@ import structlog
 from fastapi import FastAPI
 from app.core.config import settings
 from app.api import health, auth
+from app.api import detect, jobs
 
 # Configure structured logging
 structlog.configure(
@@ -34,10 +35,21 @@ app.add_middleware(
 
 app.include_router(health.router, prefix="/internal")
 app.include_router(auth.router, prefix=f"{settings.API_V1_STR}/auth")
+app.include_router(detect.router, prefix=f"{settings.API_V1_STR}/detect")
+app.include_router(jobs.router, prefix=f"{settings.API_V1_STR}/jobs")
+
+from app.core.storage import storage
+from app.core.queue import queue_service
 
 @app.on_event("startup")
 async def startup_event():
     logger.info("api_gateway_starting", version=settings.VERSION)
+    storage.initialize()
+    await queue_service.connect()
+
+@app.on_event("shutdown")
+async def shutdown_event():
+    await queue_service.close()
 
 @app.get("/")
 async def root():

@@ -47,12 +47,12 @@ class Job(Base):
         nullable=False
     )
     status: Mapped[JobStatus] = mapped_column(
-        Enum(JobStatus, name="job_status", native_enum=True),
+        Enum(JobStatus, name="job_status", native_enum=True, values_callable=lambda obj: [e.value for e in obj]),
         nullable=False,
         default=JobStatus.QUEUED
     )
     modality: Mapped[ModalityType] = mapped_column(
-        Enum(ModalityType, name="modality_type", native_enum=True),
+        Enum(ModalityType, name="modality_type", native_enum=True, values_callable=lambda obj: [e.value for e in obj]),
         nullable=False
     )
     input_type: Mapped[str] = mapped_column(String(10), nullable=False)

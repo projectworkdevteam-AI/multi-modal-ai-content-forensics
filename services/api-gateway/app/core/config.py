@@ -4,7 +4,9 @@ class Settings(BaseSettings):
     PROJECT_NAME: str = "API Gateway"
     VERSION: str = "1.0.0"
     API_V1_STR: str = "/api/v1"
-    
+    JWT_SECRET_KEY: str
+    JWT_ALGORITHM: str = "HS256"
+    AUTH_SERVICE_URL: str = "http://localhost:8000/api/v1/auth"    
     model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8", extra="ignore")
 
 settings = Settings()

@@ -1,6 +1,12 @@
-import pytest
-from app.core.security import verify_password, get_password_hash, create_access_token, create_refresh_token, verify_token
+from app.core.security import (
+    verify_password,
+    get_password_hash,
+    create_access_token,
+    create_refresh_token,
+    verify_token,
+)
 from datetime import timedelta
+
 
 def test_password_hashing():
     password = "supersecretpassword"
@@ -8,6 +14,7 @@ def test_password_hashing():
     assert hashed != password
     assert verify_password(password, hashed) is True
     assert verify_password("wrongpassword", hashed) is False
+
 
 def test_access_token():
     data = {"sub": "user_id_123", "email": "test@test.com", "role": "user"}
@@ -19,6 +26,7 @@ def test_access_token():
     assert decoded["role"] == data["role"]
     assert "exp" in decoded
 
+
 def test_refresh_token():
     data = {"sub": "user_id_123"}
     token = create_refresh_token(data)
@@ -27,6 +35,7 @@ def test_refresh_token():
     assert decoded["sub"] == data["sub"]
     assert decoded["type"] == "refresh"
     assert "exp" in decoded
+
 
 def test_expired_token():
     data = {"sub": "user_id_123"}

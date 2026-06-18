@@ -10,7 +10,7 @@ structlog.configure(
         structlog.contextvars.merge_contextvars,
         structlog.processors.add_log_level,
         structlog.processors.TimeStamper(fmt="iso"),
-        structlog.processors.JSONRenderer()
+        structlog.processors.JSONRenderer(),
     ],
     logger_factory=structlog.PrintLoggerFactory(),
 )
@@ -24,7 +24,7 @@ from app.core.limiter import limiter
 app = FastAPI(
     title=settings.PROJECT_NAME,
     version=settings.VERSION,
-    openapi_url=f"{settings.API_V1_STR}/openapi.json"
+    openapi_url=f"{settings.API_V1_STR}/openapi.json",
 )
 
 app.state.limiter = limiter
@@ -48,15 +48,18 @@ app.include_router(jobs.router, prefix=f"{settings.API_V1_STR}/jobs")
 from app.core.storage import storage
 from app.core.queue import queue_service
 
+
 @app.on_event("startup")
 async def startup_event():
     logger.info("api_gateway_starting", version=settings.VERSION)
     storage.initialize()
     await queue_service.connect()
 
+
 @app.on_event("shutdown")
 async def shutdown_event():
     await queue_service.close()
+
 
 @app.get("/")
 async def root():

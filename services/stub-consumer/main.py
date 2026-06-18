@@ -7,12 +7,13 @@ from datetime import datetime, timezone
 import traceback
 
 from shared.db.session import async_session_maker
-from shared.db.models.job import Job, JobStatus
+from shared.db.models.job import Job
 
 logger = structlog.get_logger()
 
 RABBITMQ_URL = os.environ["RABBITMQ_URL"]
 QUEUE_NAME = os.getenv("QUEUE_IMAGE_DETECTION", "image-detection-queue")
+
 
 async def process_message(message: aio_pika.IncomingMessage):
     async with message.process(ignore_processed=True):
@@ -33,7 +34,7 @@ async def process_message(message: aio_pika.IncomingMessage):
                     logger.error("job_not_found", job_id=job_id)
                     await message.reject(requeue=False)
                     return
-                
+
                 job.status = "processing"
                 job.started_at = datetime.now(timezone.utc)
                 await session.commit()
@@ -54,10 +55,12 @@ async def process_message(message: aio_pika.IncomingMessage):
             await message.ack()
 
         except Exception as e:
-            logger.error("job_processing_error", error=str(e), traceback=traceback.format_exc())
-            
+            logger.error(
+                "job_processing_error", error=str(e), traceback=traceback.format_exc()
+            )
+
             # If we know the job_id, mark it as FAILED
-            if 'job_id' in locals() and job_id:
+            if "job_id" in locals() and job_id:
                 try:
                     async with async_session_maker() as session:
                         job = await session.get(Job, job_id)
@@ -72,13 +75,14 @@ async def process_message(message: aio_pika.IncomingMessage):
             # Acknowledge the message so it doesn't loop infinitely (or we could reject without requeue)
             await message.reject(requeue=False)
 
+
 async def main():
     structlog.configure(
         processors=[
             structlog.contextvars.merge_contextvars,
             structlog.processors.add_log_level,
             structlog.processors.TimeStamper(fmt="iso"),
-            structlog.processors.JSONRenderer()
+            structlog.processors.JSONRenderer(),
         ]
     )
 
@@ -97,6 +101,7 @@ async def main():
             await asyncio.Future()
         except asyncio.CancelledError:
             logger.info("stub_consumer_stopped")
+
 
 if __name__ == "__main__":
     asyncio.run(main())

@@ -4,6 +4,7 @@ from app.core.config import settings
 
 router = APIRouter()
 
+
 @router.get("/health", tags=["health"])
 async def health_check():
     return {
@@ -11,5 +12,5 @@ async def health_check():
         "status": "healthy",
         "version": settings.VERSION,
         "timestamp": datetime.now(timezone.utc).isoformat(),
-        "dependencies": {}
+        "dependencies": {},
     }

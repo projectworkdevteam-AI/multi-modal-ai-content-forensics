@@ -7,6 +7,7 @@ from app.core.config import settings
 
 logger = structlog.get_logger()
 
+
 class QueueService:
     def __init__(self):
         self.connection = None
@@ -31,15 +32,16 @@ class QueueService:
             message = aio_pika.Message(
                 body=json.dumps(message_body).encode("utf-8"),
                 delivery_mode=aio_pika.DeliveryMode.PERSISTENT,
-                content_type="application/json"
+                content_type="application/json",
             )
             await self.channel.default_exchange.publish(
-                message,
-                routing_key=routing_key
+                message, routing_key=routing_key
             )
             logger.info("rabbitmq_message_published", routing_key=routing_key)
         except Exception as e:
-            logger.error("rabbitmq_publish_error", routing_key=routing_key, error=str(e))
+            logger.error(
+                "rabbitmq_publish_error", routing_key=routing_key, error=str(e)
+            )
             raise
 
     async def close(self):
@@ -47,5 +49,6 @@ class QueueService:
         if self.connection:
             await self.connection.close()
             logger.info("rabbitmq_connection_closed")
+
 
 queue_service = QueueService()

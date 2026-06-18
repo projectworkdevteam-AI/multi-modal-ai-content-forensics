@@ -5,13 +5,11 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.dialects.postgresql import UUID
 from shared.db.base import Base
 
+
 class User(Base):
     __tablename__ = "users"
     __table_args__ = (
-        CheckConstraint(
-            "role IN ('user', 'admin', 'analyst')",
-            name="chk_user_role"
-        ),
+        CheckConstraint("role IN ('user', 'admin', 'analyst')", name="chk_user_role"),
     )
 
     id: Mapped[uuid.UUID] = mapped_column(
@@ -26,7 +24,10 @@ class User(Base):
         DateTime(timezone=True), nullable=False, default=datetime.utcnow
     )
     updated_at: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True), nullable=False, default=datetime.utcnow, onupdate=datetime.utcnow
+        DateTime(timezone=True),
+        nullable=False,
+        default=datetime.utcnow,
+        onupdate=datetime.utcnow,
     )
 
     # Relationships

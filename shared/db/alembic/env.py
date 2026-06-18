@@ -16,7 +16,9 @@ if config.config_file_name is not None:
 
 # Import models to register them on target_metadata
 from shared.db.models import Base
+
 target_metadata = Base.metadata
+
 
 def get_url() -> str:
     POSTGRES_USER = os.getenv("POSTGRES_USER", "forensics_user")
@@ -24,9 +26,10 @@ def get_url() -> str:
     POSTGRES_HOST = os.getenv("POSTGRES_HOST", "localhost")
     POSTGRES_PORT = os.getenv("POSTGRES_PORT", "5432")
     POSTGRES_DB = os.getenv("POSTGRES_DB", "forensics_db")
-    
+
     url = f"postgresql+asyncpg://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{POSTGRES_HOST}:{POSTGRES_PORT}/{POSTGRES_DB}"
     return url
+
 
 def run_migrations_offline() -> None:
     """Run migrations in 'offline' mode."""
@@ -41,6 +44,7 @@ def run_migrations_offline() -> None:
     with context.begin_transaction():
         context.run_migrations()
 
+
 def do_run_migrations(connection: Connection) -> None:
     context.configure(
         connection=connection,
@@ -49,6 +53,7 @@ def do_run_migrations(connection: Connection) -> None:
 
     with context.begin_transaction():
         context.run_migrations()
+
 
 async def run_migrations_online() -> None:
     """Run migrations in 'online' mode."""
@@ -65,6 +70,7 @@ async def run_migrations_online() -> None:
         await connection.run_sync(do_run_migrations)
 
     await connectable.dispose()
+
 
 if context.is_offline_mode():
     run_migrations_offline()

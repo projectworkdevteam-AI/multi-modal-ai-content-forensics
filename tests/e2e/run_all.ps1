@@ -11,12 +11,12 @@ Start-Sleep -Seconds 10
 
 # 2. Start Backend APIs
 Write-Host "Starting API Gateway and Auth Service..."
-Start-Process -NoNewWindow -FilePath "..\.venv\Scripts\python.exe" -ArgumentList "-m uvicorn services.auth-service.app.main:app --host 0.0.0.0 --port 8001"
-Start-Process -NoNewWindow -FilePath "..\.venv\Scripts\python.exe" -ArgumentList "-m uvicorn services.api-gateway.app.main:app --host 0.0.0.0 --port 8000"
+Start-Process -NoNewWindow -FilePath ".venv\Scripts\python.exe" -ArgumentList "-m uvicorn services.auth-service.app.main:app --host 0.0.0.0 --port 8001"
+Start-Process -NoNewWindow -FilePath ".venv\Scripts\python.exe" -ArgumentList "-m uvicorn services.api-gateway.app.main:app --host 0.0.0.0 --port 8000"
 
 # 3. Start Stub Consumer
 Write-Host "Starting Stub Consumer..."
-Start-Process -NoNewWindow -FilePath "..\.venv\Scripts\python.exe" -ArgumentList "services\stub-consumer\main.py"
+Start-Process -NoNewWindow -FilePath ".venv\Scripts\python.exe" -ArgumentList "services\stub-consumer\main.py"
 
 # Wait for APIs
 Start-Sleep -Seconds 5

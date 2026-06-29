@@ -4,13 +4,13 @@ import uuid
 import magic
 from typing import Dict, Any
 
-from app.api.deps import get_current_user
+from .deps import get_current_user
 from shared.db.session import get_async_session
 from shared.db.models.job import Job, JobStatus, ModalityType
-from app.core.storage import storage
-from app.core.queue import queue_service
-from app.core.config import settings
-from app.core.limiter import limiter
+from ..core.storage import storage
+from ..core.queue import queue_service
+from ..core.config import settings
+from ..core.limiter import limiter
 
 router = APIRouter()
 

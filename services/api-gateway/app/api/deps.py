@@ -2,7 +2,7 @@ from fastapi import Depends, HTTPException, status, Request
 import jwt
 from typing import Dict, Any
 
-from app.core.config import settings
+from ..core.config import settings
 
 def get_current_user(request: Request) -> Dict[str, Any]:
     token = request.cookies.get("access_token")

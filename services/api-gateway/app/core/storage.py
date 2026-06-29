@@ -3,7 +3,7 @@ from minio import Minio
 from minio.error import S3Error
 import io
 
-from app.core.config import settings
+from .config import settings
 
 logger = structlog.get_logger()
 

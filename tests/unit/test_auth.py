@@ -97,8 +97,14 @@ def test_login_success():
     )
 
     assert response.status_code == 200
-    assert "access_token" in response.json()
-    assert "refresh_token" in response.json()
+    assert response.json() == {
+        "message": "Successfully logged in",
+        "token_type": "cookie"
+    }
+    
+    cookies = [val for key, val in response.headers.items() if key.lower() == "set-cookie"]
+    assert any("access_token=" in c and "HttpOnly" in c for c in cookies)
+    assert any("refresh_token=" in c and "HttpOnly" in c for c in cookies)
 
 
 def test_login_invalid_password():

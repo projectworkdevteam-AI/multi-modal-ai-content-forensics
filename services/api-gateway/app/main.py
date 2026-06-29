@@ -1,8 +1,8 @@
 import structlog
 from fastapi import FastAPI
-from app.core.config import settings
-from app.api import health, auth
-from app.api import detect, jobs
+from .core.config import settings
+from .api import health, auth
+from .api import detect, jobs
 
 # Configure structured logging
 structlog.configure(
@@ -19,7 +19,7 @@ logger = structlog.get_logger()
 
 from slowapi import _rate_limit_exceeded_handler
 from slowapi.errors import RateLimitExceeded
-from app.core.limiter import limiter
+from .core.limiter import limiter
 
 app = FastAPI(
     title=settings.PROJECT_NAME,
@@ -45,8 +45,8 @@ app.include_router(auth.router, prefix=f"{settings.API_V1_STR}/auth")
 app.include_router(detect.router, prefix=f"{settings.API_V1_STR}/detect")
 app.include_router(jobs.router, prefix=f"{settings.API_V1_STR}/jobs")
 
-from app.core.storage import storage
-from app.core.queue import queue_service
+from .core.storage import storage
+from .core.queue import queue_service
 
 
 @app.on_event("startup")

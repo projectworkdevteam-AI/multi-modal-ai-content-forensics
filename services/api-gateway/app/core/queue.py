@@ -3,7 +3,7 @@ import aio_pika
 import json
 from typing import Dict, Any
 
-from app.core.config import settings
+from .config import settings
 
 logger = structlog.get_logger()
 

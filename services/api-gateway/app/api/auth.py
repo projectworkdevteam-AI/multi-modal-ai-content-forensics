@@ -2,8 +2,8 @@ from fastapi import APIRouter, Depends, HTTPException, Request, Response
 import httpx
 from typing import Dict, Any
 
-from app.core.config import settings
-from app.api.deps import get_current_user
+from ..core.config import settings
+from .deps import get_current_user
 
 router = APIRouter(tags=["auth"])
 

@@ -4,7 +4,7 @@ from sqlalchemy import select
 import uuid
 from typing import Dict, Any
 
-from app.api.deps import get_current_user
+from .deps import get_current_user
 from shared.db.session import get_async_session
 from shared.db.models.job import Job
 

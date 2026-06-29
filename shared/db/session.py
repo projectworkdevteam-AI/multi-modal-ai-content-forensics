@@ -4,7 +4,7 @@ from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, Asyn
 
 # Retrieve credentials or fallback to development defaults
 POSTGRES_USER = os.getenv("POSTGRES_USER", "forensics_user")
-POSTGRES_PASSWORD = os.environ["POSTGRES_PASSWORD"]
+POSTGRES_PASSWORD = os.getenv("POSTGRES_PASSWORD", "forensics_password")
 POSTGRES_HOST = os.getenv("POSTGRES_HOST", "localhost")
 POSTGRES_PORT = os.getenv("POSTGRES_PORT", "5432")
 POSTGRES_DB = os.getenv("POSTGRES_DB", "forensics_db")
